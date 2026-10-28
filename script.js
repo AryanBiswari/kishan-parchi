@@ -44,12 +44,39 @@ document.getElementById('p_date').innerText = new Date().toLocaleDateString('en-
             const commission = (rakam * commRate) / 100;
 
             // --- Advance Interest Logic ---
-            // Formula: (रकम * महीने * दर) / 100
             const advInterest = (advRakam * advMonths * advRate) / 100;
             const totalAdvanceDeduction = advRakam + advInterest;
 
-            // Final Rakam Deduction
-            const finalRakam = rakam - tulaai - commission - totalAdvanceDeduction;
+            // --- SMART VISIBILITY LOGIC (नया बदलाव) ---
+            const hasCrop = (rakam > 0 || vajan > 0);
+            const hasAdvance = (advRakam > 0);
+
+            // 1. Crop UI & Print Toggle (अगर फसल नहीं है, तो वजन/तुलाई/कमीशन छुपा दें)
+            if (hasCrop) {
+                if(document.getElementById('cropResultBox')) document.getElementById('cropResultBox').style.display = 'block';
+                if(document.getElementById('print_vajan_row')) document.getElementById('print_vajan_row').style.display = 'table-row';
+                if(document.getElementById('print_dar_row')) document.getElementById('print_dar_row').style.display = 'table-row';
+                if(document.getElementById('print_rakam_row')) document.getElementById('print_rakam_row').style.display = 'table-row';
+                if(document.getElementById('print_tulaai_row')) document.getElementById('print_tulaai_row').style.display = 'table-row';
+                if(document.getElementById('print_comm_row')) document.getElementById('print_comm_row').style.display = 'table-row';
+                if(document.getElementById('print_crop_hr')) document.getElementById('print_crop_hr').style.display = 'table-row';
+            } else {
+                if(document.getElementById('cropResultBox')) document.getElementById('cropResultBox').style.display = 'none';
+                if(document.getElementById('print_vajan_row')) document.getElementById('print_vajan_row').style.display = 'none';
+                if(document.getElementById('print_dar_row')) document.getElementById('print_dar_row').style.display = 'none';
+                if(document.getElementById('print_rakam_row')) document.getElementById('print_rakam_row').style.display = 'none';
+                if(document.getElementById('print_tulaai_row')) document.getElementById('print_tulaai_row').style.display = 'none';
+                if(document.getElementById('print_comm_row')) document.getElementById('print_comm_row').style.display = 'none';
+                if(document.getElementById('print_crop_hr')) document.getElementById('print_crop_hr').style.display = 'none';
+            }
+
+            // Final Rakam Logic (अगर सिर्फ एडवांस है, तो टोटल माइनस में न जाकर सिर्फ एडवांस का अमाउंट दिखेगा)
+            let finalRakam = 0;
+            if (hasCrop) {
+                finalRakam = rakam - tulaai - commission - totalAdvanceDeduction;
+            } else if (hasAdvance) {
+                finalRakam = totalAdvanceDeduction;
+            }
 
             // Update UI Details
             document.getElementById('rakamTxt').innerText = Math.round(rakam);
@@ -61,11 +88,11 @@ document.getElementById('p_date').innerText = new Date().toLocaleDateString('en-
             // Show/Hide Advance Box in UI
             const advBox = document.getElementById('advResultBox');
             if (advRakam > 0) {
-                advBox.style.display = 'block';
-                document.getElementById('advRakamTxt').innerText = Math.round(advRakam);
-                document.getElementById('advInterestTxt').innerText = Math.round(advInterest);
+                if(advBox) advBox.style.display = 'block';
+                if(document.getElementById('advRakamTxt')) document.getElementById('advRakamTxt').innerText = Math.round(advRakam);
+                if(document.getElementById('advInterestTxt')) document.getElementById('advInterestTxt').innerText = Math.round(advInterest);
             } else {
-                advBox.style.display = 'none';
+                if(advBox) advBox.style.display = 'none';
             }
 
             document.getElementById('finalRakamTxt').innerText = Math.round(finalRakam);
@@ -76,9 +103,9 @@ document.getElementById('p_date').innerText = new Date().toLocaleDateString('en-
             document.getElementById('p_vajan').innerText = vajan.toFixed(2);
             document.getElementById('p_dar').innerText = dar;
             document.getElementById('p_rakam').innerText = Math.round(rakam);
-            document.getElementById('p_tulaai_label').innerText = `तुलाई (@ ₹${tulaaiRate}):`;
+            document.getElementById('p_tulaai_label').innerText = "तुलाई (-):";
             document.getElementById('p_tulaai').innerText = Math.round(tulaai);
-            document.getElementById('p_comm_label').innerText = `कमीशन (@ ${commRate}%):`;
+            document.getElementById('p_comm_label').innerText = "खर्चा (-):";
             document.getElementById('p_comm').innerText = Math.round(commission);
             
             // Advance Print Handling
@@ -86,23 +113,28 @@ document.getElementById('p_date').innerText = new Date().toLocaleDateString('en-
             const printAdvIntRow = document.getElementById('print_adv_int_row');
             
             if (advRakam > 0) {
-                printAdvRow.style.display = 'table-row';
-                document.getElementById('p_adv_rakam').innerText = Math.round(advRakam);
+                if(printAdvRow) {
+                    printAdvRow.style.display = 'table-row';
+                    document.getElementById('p_adv_rakam').innerText = Math.round(advRakam);
+                }
                 
                 if(advInterest > 0) {
-                    printAdvIntRow.style.display = 'table-row';
-                    document.getElementById('p_adv_int_label').innerText = `ब्याज (@ ${advRate}% x ${advMonths} माह):`;
-                    document.getElementById('p_adv_int').innerText = Math.round(advInterest);
+                    if(printAdvIntRow) {
+                        printAdvIntRow.style.display = 'table-row';
+                        document.getElementById('p_adv_int_label').innerText = `ब्याज (@ ${advRate}% x ${advMonths} माह):`;
+                        document.getElementById('p_adv_int').innerText = Math.round(advInterest);
+                    }
                 } else {
-                    printAdvIntRow.style.display = 'none';
+                    if(printAdvIntRow) printAdvIntRow.style.display = 'none';
                 }
             } else {
-                printAdvRow.style.display = 'none';
-                printAdvIntRow.style.display = 'none';
+                if(printAdvRow) printAdvRow.style.display = 'none';
+                if(printAdvIntRow) printAdvIntRow.style.display = 'none';
             }
 
             document.getElementById('p_final').innerText = Math.round(finalRakam);
             
+            // बोरी और भर्ती अगर 0 हैं तो उन्हें प्रिंट से हटा दें
             document.getElementById('print_bori_row').style.display = bori > 0 ? 'table-row' : 'none';
             document.getElementById('print_bharti_row').style.display = bharti > 0 ? 'table-row' : 'none';
         }
@@ -136,8 +168,10 @@ document.getElementById('p_date').innerText = new Date().toLocaleDateString('en-
 
                 function focusNext(nextId) {
                     const nextInput = document.getElementById(nextId);
-                    nextInput.focus();
-                    nextInput.select(); 
+                    if(nextInput) {
+                        nextInput.focus();
+                        nextInput.select(); 
+                    }
                 }
 
                 // Keyboard Sequence
@@ -146,7 +180,6 @@ document.getElementById('p_date').innerText = new Date().toLocaleDateString('en-
                 else if (activeId === 'bharti') focusNext('vajanInput');
                 else if (activeId === 'vajanInput') focusNext('dar');
                 else if (activeId === 'dar') {
-                    // अगर एडवांस लेना है तो आगे बढ़ें, नहीं तो सीधा प्रिंट करें
                     if(document.getElementById('advRakam').value === "") {
                         focusNext('advRakam');
                     } else {
