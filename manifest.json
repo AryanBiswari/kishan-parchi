@@ -1,0 +1,21 @@
+{
+  "name": "किसान की पर्ची",
+  "short_name": "Kishan Parchi",
+  "description": "Offline Parchi Printing Software for Mandi",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1d4ed8",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

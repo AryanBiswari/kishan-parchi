@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1d4ed8">
+    <title>Kishan ki Parchi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-gray-100 p-6">
+
+    <!-- Data Entry Form -->
+    <div class="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-md no-print">
+        <h2 class="text-3xl font-bold mb-6 text-center text-blue-700">किसान की पर्ची</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-gray-700 font-bold mb-1">किसान का नाम</label>
+                    <input type="text" id="kisanName" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="नाम दर्ज करें" oninput="updateKisanName()">
+                </div>
+                
+                <!-- Crop Details Grid -->
+                <div class="grid grid-cols-4 gap-3 border-b pb-4">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1 text-sm">बोरी</label>
+                        <input type="number" id="bori" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="0" oninput="calculate(false)">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1 text-sm">भर्ती(Kg)</label>
+                        <input type="number" id="bharti" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="0" oninput="calculate(false)">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1 text-sm text-blue-700">वजन(क्विं.)</label>
+                        <input type="number" id="vajanInput" class="w-full border p-2 rounded bg-blue-50 font-bold focus:ring-2 focus:ring-blue-500" placeholder="0.00" oninput="calculate(true)">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1 text-sm">दर(रु)</label>
+                        <input type="number" id="dar" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="0" oninput="calculate(true)">
+                    </div>
+                </div>
+
+                <!-- Advance & Deductions Section -->
+                <h3 class="text-lg font-bold text-gray-700 mt-2">एडवांस / उधारी (वैकल्पिक)</h3>
+                <div class="grid grid-cols-3 gap-3 bg-red-50 p-3 rounded border border-red-100">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1 text-sm">रकम (Rs)</label>
+                        <input type="number" id="advRakam" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="0" oninput="calculate(true)">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1 text-sm">महीने</label>
+                        <input type="number" id="advMonths" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="0" oninput="calculate(true)">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1 text-sm">ब्याज (%)</label>
+                        <input type="number" id="advRate" class="w-full border p-2 rounded focus:ring-2 focus:ring-blue-500" placeholder="2" value="2" oninput="calculate(true)">
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mt-2">
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1">तुलाई (रु/बोरी)</label>
+                        <input type="number" id="tulaaiRate" value="10" class="w-full border p-2 rounded bg-yellow-50 focus:ring-2 focus:ring-blue-500" oninput="calculate(true)">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-1">कमीशन (%)</label>
+                        <input type="number" id="commRate" value="3" class="w-full border p-2 rounded bg-yellow-50 focus:ring-2 focus:ring-blue-500" oninput="calculate(true)">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Auto Calculated Outputs -->
+            <div class="bg-gray-50 p-5 rounded border space-y-3 text-lg">
+                <div class="flex justify-between"><span>फसल की रकम:</span> <strong id="rakamTxt">0</strong></div>
+                <div class="flex justify-between text-red-600">
+                    <span id="tulaaiLabel">तुलाई (-):</span> <strong id="tulaaiTxt">0</strong>
+                </div>
+                <div class="flex justify-between text-red-600 border-b pb-2">
+                    <span id="commLabel">कमीशन (-):</span> <strong id="commTxt">0</strong>
+                </div>
+                
+                <!-- Advance Results -->
+                <div id="advResultBox" class="text-red-700 bg-red-100 p-2 rounded hidden">
+                    <div class="flex justify-between text-sm"><span>मूल एडवांस (-):</span> <strong id="advRakamTxt">0</strong></div>
+                    <div class="flex justify-between text-sm"><span>एडवांस का ब्याज (-):</span> <strong id="advInterestTxt">0</strong></div>
+                </div>
+
+                <div class="flex justify-between text-2xl text-green-700 font-bold pt-2">
+                    <span>कुल देय:</span> <strong id="finalRakamTxt">0</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-8 flex gap-4">
+            <button onclick="printParchi()" class="flex-1 bg-green-600 text-white font-bold py-4 rounded text-xl hover:bg-green-700 transition shadow-lg">
+                पर्ची प्रिंट करें (Enter)
+            </button>
+            <button onclick="resetForm()" class="bg-red-500 text-white font-bold px-6 py-4 rounded hover:bg-red-600 shadow-md">
+                Reset
+            </button>
+        </div>
+    </div>
+
+    <!-- Printable Receipt Layout -->
+    <div class="print-only parchi-box">
+        <h3 style="text-align: center; font-size: 20px; margin-bottom: 5px; margin-top: 0;">श्री गणेशाय नमः</h3>
+        <h2 style="text-align: center; border-bottom: 1px solid black; padding-bottom: 10px; margin-top: 0;">कच्ची पर्ची</h2>
+        
+        <p><strong>दिनांक:</strong> <span id="p_date"></span></p>
+        <p><strong>किसान:</strong> <span id="p_name"></span></p>
+        
+        <table style="width: 100%; text-align: left; margin-top: 15px; border-collapse: collapse; font-size: 14px;">
+            <tr id="print_bori_row"><td style="padding: 3px 0;">बोरी:</td> <td><span id="p_bori">0</span></td></tr>
+            <tr id="print_bharti_row"><td style="padding: 3px 0;">भर्ती:</td> <td><span id="p_bharti">0</span> Kg</td></tr>
+            <tr><td style="padding: 3px 0;">वजन:</td> <td><span id="p_vajan">0</span> क्विंटल</td></tr>
+            <tr><td style="padding: 3px 0;">दर:</td> <td>₹<span id="p_dar">0</span></td></tr>
+            <tr><td colspan="2"><hr style="margin: 5px 0;"></td></tr>
+            <tr><td style="padding: 3px 0;">फसल रकम:</td> <td>₹<span id="p_rakam">0</span></td></tr>
+            <tr><td style="padding: 3px 0;" id="p_tulaai_label">तुलाई (-):</td> <td>₹<span id="p_tulaai">0</span></td></tr>
+            <tr><td style="padding: 3px 0;" id="p_comm_label">कमीशन (-):</td> <td>₹<span id="p_comm">0</span></td></tr>
+            
+            <!-- Advance Print Rows (Hidden by default) -->
+            <tr id="print_adv_row" style="display: none;"><td style="padding: 3px 0;">एडवांस (-):</td> <td>₹<span id="p_adv_rakam">0</span></td></tr>
+            <tr id="print_adv_int_row" style="display: none;"><td style="padding: 3px 0;" id="p_adv_int_label">ब्याज (-):</td> <td>₹<span id="p_adv_int">0</span></td></tr>
+            
+            <tr><td colspan="2"><hr style="margin: 5px 0;"></td></tr>
+            <tr>
+                <td style="padding: 5px 0; font-weight: bold; font-size: 16px;">कुल देय:</td> 
+                <td style="font-weight: bold; font-size: 16px;">₹<span id="p_final">0</span></td>
+            </tr>
+        </table>
+    </div>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(reg => console.log('Service Worker Registered!'))
+                    .catch(err => console.log('Service Worker Error', err));
+            });
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

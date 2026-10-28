@@ -1,0 +1,27 @@
+@media print {
+            body {
+                background: white;
+                margin: 0;
+                padding: 0;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .print-only {
+                display: block !important;
+            }
+
+            .parchi-box {
+                border: 2px solid black;
+                padding: 15px;
+                width: 80mm;
+                margin: 0 auto;
+                font-family: sans-serif;
+            }
+        }
+
+        .print-only {
+            display: none;
+        }
