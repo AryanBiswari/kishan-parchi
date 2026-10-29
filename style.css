@@ -294,3 +294,14 @@ label {
     .print-table hr.dashed { border-top: 1px dashed black; }
     .print-total { font-weight: bold; font-size: 16px; padding: 5px 0; }
 }
+/* --- नया इंस्टॉल बटन स्टाइल --- */
+.btn-install {
+    flex: 1;
+    background: linear-gradient(to right, #6366f1, #4f46e5); /* Indigo Color */
+    color: white;
+    box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-install:hover {
+    background: linear-gradient(to right, #4f46e5, #4338ca);
+}

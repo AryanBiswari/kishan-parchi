@@ -5,6 +5,50 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateKisanName() {
     document.getElementById('p_name').innerText = document.getElementById('kisanName').value;
 }
+// --- PWA (Desktop/Mobile) Install Logic ---
+let deferredPrompt;
+const installBtn = document.getElementById('installBtn');
+
+// जब ब्राउज़र को लगता है कि ऐप इंस्टॉल किया जा सकता है, तब यह इवेंट चलेगा
+window.addEventListener('beforeinstallprompt', (e) => {
+    // ब्राउज़र का डिफ़ॉल्ट पॉपअप रोकें
+    e.preventDefault();
+    
+    // इवेंट को सेव करें ताकि बटन क्लिक पर चलाया जा सके
+    deferredPrompt = e;
+    
+    // अब हमारा कस्टम "App इंस्टॉल करें" बटन दिखाएं
+    if (installBtn) installBtn.classList.remove('hidden');
+});
+
+// जब यूज़र "App इंस्टॉल करें" बटन पर क्लिक करेगा
+if (installBtn) {
+    installBtn.addEventListener('click', async () => {
+        if (deferredPrompt !== null) {
+            // असली इंस्टॉल प्रॉम्प्ट खोलें
+            deferredPrompt.prompt();
+            
+            // यूज़र के जवाब (Install या Cancel) का इंतज़ार करें
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                console.log('App Successfully Installed!');
+            }
+            
+            // एक बार इस्तेमाल होने के बाद इसे खाली कर दें
+            deferredPrompt = null;
+            
+            // बटन को हमेशा के लिए छुपा दें
+            installBtn.classList.add('hidden');
+        }
+    });
+}
+
+// अगर यूज़र ने ऐप इंस्टॉल कर लिया, तो बटन छुपा दें
+window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    if (installBtn) installBtn.classList.add('hidden');
+});
 
 function calculate(isManualVajan) {
     const bori = parseFloat(document.getElementById('bori').value) || 0;
