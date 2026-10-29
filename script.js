@@ -132,11 +132,7 @@ function calculate(isManualVajan) {
 }
 
 function printParchi() {
-    if (!document.getElementById('kisanName').value) {
-        alert("कृपया किसान का नाम दर्ज करें!");
-        document.getElementById('kisanName').focus();
-        return;
-    }
+    
     window.print();
 }
 
