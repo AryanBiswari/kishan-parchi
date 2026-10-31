@@ -1,3 +1,227 @@
+<!-- 
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kishan ki Parchi - Premium</title>
+    
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1d4ed8">
+</head>
+<body>
+
+    
+    <div class="main-card no-print">
+        
+        
+        <div class="header">
+            <h2 class="title">किसान की पर्ची</h2>
+            <p class="subtitle">डिजिटल मंडी समाधान</p>
+        </div>
+        
+        <div class="grid-layout">
+            
+            <div class="form-section">
+                
+                
+                <div class="input-box">
+                    <label>किसान का नाम</label>
+                    <input type="text" id="kisanName" class="form-input text-large" placeholder="नाम दर्ज करें..." oninput="updateKisanName()">
+                </div>
+                
+                
+                <div class="input-box">
+                    <h3>फसल विवरण</h3>
+                    <div class="grid-4">
+                        <div>
+                            <label>बोरी</label>
+                            <input type="number" id="bori" class="form-input" placeholder="0" oninput="calculate(false)">
+                        </div>
+                        <div>
+                            <label>भर्ती (Kg)</label>
+                            <input type="number" id="bharti" class="form-input" placeholder="0" oninput="calculate(false)">
+                        </div>
+                        <div>
+                            <label class="text-emerald">वजन (क्विं.)</label>
+                            <input type="number" id="vajanInput" class="form-input highlight-input" placeholder="0.00" oninput="calculate(true)">
+                        </div>
+                        <div>
+                            <label>दर (रु)</label>
+                            <input type="number" id="dar" class="form-input" placeholder="0" oninput="calculate(true)">
+                        </div>
+                    </div>
+                </div>
+
+                
+                 <div class="advance-box">
+                    <h3>एडवांस / उधारी (वैकल्पिक)</h3>
+                    <div class="grid-3">
+                        <div>
+                            <label>रकम (Rs)</label>
+                            <input type="number" id="advRakam" class="form-input" placeholder="0" oninput="calculate(true)">
+                        </div>
+                        <div>
+                            <label>महीने</label>
+                            <input type="number" id="advMonths" class="form-input" placeholder="0" oninput="calculate(true)">
+                        </div>
+                        <div>
+                            <label>ब्याज (%)</label>
+                            <input type="number" id="advRate" class="form-input" placeholder="2" value="2" oninput="calculate(true)">
+                        </div>
+                    </div>
+                </div> 
+                
+                
+                 <div class="grid-2">
+                    <div class="input-box mini-box">
+                        <label>तुलाई (रु/बोरी)</label>
+                        <input type="number" id="tulaaiRate" value="10" class="form-input" oninput="calculate(true)">
+                    </div>
+                    <div class="input-box mini-box">
+                        <label>कमीशन (%)</label>
+                        <input type="number" id="commRate" value="3" class="form-input" oninput="calculate(true)">
+                    </div>
+                </div>
+            </div> 
+            
+            <div class="advance-box">
+                    <h3>एडवांस / उधारी (वैकल्पिक)</h3>
+                    <div class="grid-3">
+                        <div>
+                            <label>रकम (Rs)</label>
+                            <input type="number" id="advRakam" class="form-input" placeholder="0" oninput="calculate(true)">
+                        </div>
+                        <div>
+                            <label>महीने</label>
+                            <input type="number" id="advMonths" class="form-input" placeholder="0" oninput="calculate(true)">
+                        </div>
+                        <div>
+                            <label>ब्याज (%)</label>
+                            <input type="number" id="advRate" class="form-input" placeholder="2" value="2" oninput="calculate(true)">
+                        </div>
+                    </div>
+                </div>
+
+            
+            <div class="summary-section">
+                <div class="summary-card">
+                    
+                    <div class="summary-content">
+                        <h3 class="summary-title">कैलकुलेशन समरी</h3>
+                        
+                        
+                        <div id="cropResultBox" class="result-group hidden">
+                            <div class="flex-between text-white">
+                                <span>फसल की रकम:</span> 
+                                <strong id="rakamTxt" class="text-xl">0</strong>
+                            </div>
+                            <div class="flex-between text-rose">
+                                <span id="tulaaiLabel">तुलाई (-):</span> 
+                                <strong id="tulaaiTxt">0</strong>
+                            </div>
+                            <div class="flex-between text-rose border-bottom">
+                                <span id="commLabel">खर्चा (-):</span> 
+                                <strong id="commTxt">0</strong>
+                            </div>
+                        </div>
+                        
+                        
+                        <div id="advResultBox" class="advance-result hidden">
+                            <div class="flex-between text-sky">
+                                <span>मूल एडवांस (-):</span> 
+                                <strong id="advRakamTxt">0</strong>
+                            </div>
+                            <div class="flex-between text-sky">
+                                <span>एडवांस का ब्याज (-):</span> 
+                                <strong id="advInterestTxt">0</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="final-box">
+                        <div class="flex-between">
+                            <span class="final-label">कुल देय (Rs)</span>
+                        </div>
+                        <div class="final-amount">
+                            ₹<span id="finalRakamTxt">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="button-group">
+            <button onclick="printParchi()" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                </svg>
+                पर्ची प्रिंट करें (Enter)
+            </button>
+            <button onclick="resetForm()" class="btn btn-secondary">
+                Reset
+            </button>
+            <button id="installBtn" class="btn btn-install hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                </svg>
+                App इंस्टॉल करें
+            </button>
+        </div>
+    </div>
+
+    
+    <div class="print-only parchi-box">
+        <h3 class="print-title">श्री गणेशाय नमः</h3>
+        
+        <p><strong>दिनांक:</strong> <span id="p_date"></span></p>
+        <p><strong>किसान:</strong> <span id="p_name"></span></p>
+        
+        <table class="print-table">
+            <tr id="print_bori_row"><td>बोरी:</td> <td><span id="p_bori">0</span></td></tr>
+            <tr id="print_bharti_row"><td>भर्ती:</td> <td><span id="p_bharti">0</span> Kg</td></tr>
+            <tr id="print_vajan_row"><td>वजन:</td> <td><span id="p_vajan">0</span> क्विंटल</td></tr>
+            <tr id="print_dar_row"><td>दर:</td> <td>₹<span id="p_dar">0</span></td></tr>
+            
+            <tr id="print_crop_hr"><td colspan="2"><hr></td></tr>
+            
+            <tr id="print_rakam_row"><td>फसल रकम:</td> <td>₹<span id="p_rakam">0</span></td></tr>
+            <tr id="print_tulaai_row"><td id="p_tulaai_label">तुलाई (-):</td> <td>₹<span id="p_tulaai">0</span></td></tr>
+            <tr id="print_comm_row"><td id="p_comm_label">खर्चा (-):</td> <td>₹<span id="p_comm">0</span></td></tr>
+            
+            <tr id="print_adv_row" style="display: none;"><td>एडवांस (-):</td> <td>₹<span id="p_adv_rakam">0</span></td></tr>
+            <tr id="print_adv_int_row" style="display: none;"><td id="p_adv_int_label">ब्याज (-):</td> <td>₹<span id="p_adv_int">0</span></td></tr>
+            
+            <tr><td colspan="2"><hr class="dashed"></td></tr>
+            <tr>
+                <td class="print-total">कुल देय:</td> 
+                <td class="print-total">₹<span id="p_final">0</span></td>
+            </tr>
+        </table>
+    </div>
+
+    
+     <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(reg => console.log('Service Worker Registered!'))
+                    .catch(err => console.log('Service Worker Error', err));
+            });
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+</html> -->
+
 <!DOCTYPE html>
 <html lang="hi">
 <head>
@@ -12,18 +236,15 @@
     
     <!-- Custom Pure CSS -->
     <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#1d4ed8">
 </head>
 <body>
 
     <!-- Main Data Entry Card -->
     <div class="main-card no-print">
         
-        <!-- Header Section -->
+        <!-- Header Section (Compact) -->
         <div class="header">
             <h2 class="title">किसान की पर्ची</h2>
-            <p class="subtitle">डिजिटल मंडी समाधान</p>
         </div>
         
         <div class="grid-layout">
@@ -59,7 +280,19 @@
                     </div>
                 </div>
 
-                <!-- Advance Section -->
+                <!-- Deductions Grid (तुलाई और कमीशन अब ऊपर आ गए हैं) -->
+                <div class="grid-2">
+                    <div class="input-box mini-box">
+                        <label>तुलाई (रु/बोरी)</label>
+                        <input type="number" id="tulaaiRate" value="10" class="form-input" oninput="calculate(true)">
+                    </div>
+                    <div class="input-box mini-box">
+                        <label>कमीशन (%)</label>
+                        <input type="number" id="commRate" value="3" class="form-input" oninput="calculate(true)">
+                    </div>
+                </div>
+
+                <!-- Advance Section (एडवांस अब नीचे आ गया है) -->
                 <div class="advance-box">
                     <h3>एडवांस / उधारी (वैकल्पिक)</h3>
                     <div class="grid-3">
@@ -77,24 +310,12 @@
                         </div>
                     </div>
                 </div>
-                
-                <!-- Deductions Grid -->
-                <div class="grid-2">
-                    <div class="input-box mini-box">
-                        <label>तुलाई (रु/बोरी)</label>
-                        <input type="number" id="tulaaiRate" value="10" class="form-input" oninput="calculate(true)">
-                    </div>
-                    <div class="input-box mini-box">
-                        <label>कमीशन (%)</label>
-                        <input type="number" id="commRate" value="3" class="form-input" oninput="calculate(true)">
-                    </div>
-                </div>
             </div>
 
-            <!-- Right Column: Auto Calculated Outputs -->
+            <!-- Right Column: Auto Calculated Outputs & Buttons -->
             <div class="summary-section">
+                <!-- Calculation Box -->
                 <div class="summary-card">
-                    
                     <div class="summary-content">
                         <h3 class="summary-title">कैलकुलेशन समरी</h3>
                         
@@ -137,32 +358,30 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
-        <!-- Action Buttons -->
-        <div class="button-group">
-            <button onclick="printParchi()" class="btn btn-primary">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                </svg>
-                पर्ची प्रिंट करें (Enter)
-            </button>
-            <button onclick="resetForm()" class="btn btn-secondary">
-                Reset
-            </button>
-            <button id="installBtn" class="btn btn-install hidden">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-                </svg>
-                App इंस्टॉल करें
-            </button>
+                <!-- Action Buttons (अब दाईं तरफ शिफ्ट हो गए हैं, जिससे स्क्रॉल खत्म हो गया) -->
+                <div class="button-group">
+                    <button onclick="printParchi()" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                        </svg>
+                        पर्ची प्रिंट
+                    </button>
+                    <button onclick="resetForm()" class="btn btn-secondary">
+                        Reset
+                    </button>
+                    <button id="installBtn" class="btn btn-install hidden">
+                        App इंस्टॉल करें
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Printable Receipt Layout -->
     <div class="print-only parchi-box">
         <h3 class="print-title">श्री गणेशाय नमः</h3>
+        <h2 class="print-subtitle">कच्ची पर्ची</h2>
         
         <p><strong>दिनांक:</strong> <span id="p_date"></span></p>
         <p><strong>किसान:</strong> <span id="p_name"></span></p>
@@ -190,16 +409,6 @@
         </table>
     </div>
 
-    <!-- External JavaScript -->
-     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('service-worker.js')
-                    .then(reg => console.log('Service Worker Registered!'))
-                    .catch(err => console.log('Service Worker Error', err));
-            });
-        }
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
